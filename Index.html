@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогноз от Горностая</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400&display=swap">
+</head>
+<body>
+    <!-- Экран 1: Приветствие -->
+    <div id="screen-welcome" class="screen active">
+        <div class="logo-container">
+            <div class="logo">⚜️</div>
+            <h1>Прогноз от Горностая</h1>
+            <p class="subtitle">Расклад на день по авторским картам</p>
+        </div>
+        <button id="btn-start" class="btn-main">Хочу прогноз</button>
+        <div class="footer-text">108 уникальных карт • Точные предсказания</div>
+    </div>
+
+    <!-- Экран 2: Оплата и поле -->
+    <div id="screen-payment" class="screen">
+        <div class="field-container">
+            <!-- Верхний ряд -->
+            <div class="row">
+                <div class="card-slot" data-position="success">
+                    <div class="slot-label">Успех дня</div>
+                    <div class="slot-placeholder"></div>
+                </div>
+                <div class="card-slot" data-position="risk">
+                    <div class="slot-label">Риск дня</div>
+                    <div class="slot-placeholder"></div>
+                </div>
+                <div class="card-slot" data-position="mood">
+                    <div class="slot-label">Настрой дня</div>
+                    <div class="slot-placeholder"></div>
+                </div>
+            </div>
+            
+            <!-- Нижний ряд -->
+            <div class="row">
+                <div class="card-slot" data-position="morning">
+                    <div class="slot-label">Утро</div>
+                    <div class="slot-placeholder"></div>
+                </div>
+                <div class="card-slot" data-position="day">
+                    <div class="slot-label">День</div>
+                    <div class="slot-placeholder"></div>
+                </div>
+                <div class="card-slot" data-position="evening">
+                    <div class="slot-label">Вечер</div>
+                    <div class="slot-placeholder"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <button id="btn-donate" class="btn-donate">
+                <span class="star">⭐</span> Донат 10 звёзд
+            </button>
+            <button id="btn-get-prognosis" class="btn-main" disabled>
+                Получить прогноз
+            </button>
+            <div class="payment-note">Оплатите, чтобы увидеть расклад</div>
+        </div>
+    </div>
+
+    <!-- Экран 3: Результат -->
+    <div id="screen-result" class="screen">
+        <h2>Ваш прогноз на сегодня</h2>
+        
+        <div class="field-container">
+            <div class="row">
+                <div class="card-slot">
+                    <div class="slot-label">Успех дня</div>
+                    <div class="card-show" id="card-success">
+                        <img src="" alt="Карта">
+                    </div>
+                </div>
+                <div class="card-slot">
+                    <div class="slot-label">Риск дня</div>
+                    <div class="card-show" id="card-risk">
+                        <img src="" alt="Карта">
+                    </div>
+                </div>
+                <div class="card-slot">
+                    <div class="slot-label">Настрой дня</div>
+                    <div class="card-show" id="card-mood">
+                        <img src="" alt="Карта">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="card-slot">
+                    <div class="slot-label">Утро</div>
+                    <div class="card-show" id="card-morning">
+                        <img src="" alt="Карта">
+                    </div>
+                </div>
+                <div class="card-slot">
+                    <div class="slot-label">День</div>
+                    <div class="card-show" id="card-day">
+                        <img src="" alt="Карта">
+                    </div>
+                </div>
+                <div class="card-slot">
+                    <div class="slot-label">Вечер</div>
+                    <div class="card-show" id="card-evening">
+                        <img src="" alt="Карта">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button id="btn-share" class="btn-share">
+                📤 Поделиться прогнозом
+            </button>
+            <button id="btn-new" class="btn-main">
+                Новый прогноз
+            </button>
+        </div>
+        
+        <div class="interpretation">
+            <p>💫 <strong>Интерпретируйте карты интуитивно</strong></p>
+            <p>Каждая карта уже содержит послание — доверьтесь первому впечатлению</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
