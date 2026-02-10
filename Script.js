@@ -28,9 +28,9 @@ const buttons = {
 // Настройки (ЗАМЕНИТЕ ЭТИ ССЫЛКИ!)
 const CONFIG = {
     // Замените на ваши реальные ссылки
-    CARDS_BASE_URL: "https://ВАШ_ХОСТИНГ/карты/", // Папка с картами на GitHub
+    CARDS_BASE_URL: "https://github.com/Artishoko/gor-cost-prognosis/tree/main/Cards", // Папка с картами на GitHub
     TOTAL_CARDS: 108,
-    INVOICE_URL: "https://t.me/YOUR_BOT?start=invoice_123", // Получите у @BotFather
+    INVOICE_URL: "https://t.me/Magic_G_bot?start=invoice_123", // Получите у @BotFather
     PAYMENT_AMOUNT: 10 // Звёзд
 };
 
@@ -40,7 +40,7 @@ function initApp() {
     const savedState = localStorage.getItem('gor_cost_app_state');
     if (savedState) {
         try {
-            appState = JSON.parse(savedState);
+         appState = JSON.parse(savedState);
             // Проверяем, не прошло ли больше 24 часа с последней оплаты
             if (appState.lastPaymentTime && 
                 (Date.now() - appState.lastPaymentTime) < 24 * 60 * 60 * 1000) {
