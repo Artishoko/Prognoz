@@ -133,20 +133,34 @@ function processPayment() {
         return;
     }
     
-    tg.openInvoice(CONFIG.INVOICE_URL, (status) => {
-        if (status === 'paid') {
-            appState.isPaidUser = true;
-            appState.lastPaymentTime = Date.now();
-            saveAppState();
-            updatePaymentButton();
-            
-            if (tg.showAlert) {
-                tg.showAlert('✅ Оплата прошла успешно! Теперь у вас неограниченный доступ.');
+    // Показываем кнопку оплаты через Telegram Stars
+    const starsAmount = 10; // Количество звёзд
+    
+    // Вариант 1: Открываем стандартное окно для перевода Stars
+    // Telegram сам покажет интерфейс оплаты
+    tg.openLink(`https://t.me/${tg.initDataUnsafe.user?.username || 'Magic_G_bot'}?start=stars${starsAmount}`);
+    
+    // Вариант 2: Используем WebApp метод (если доступен)
+    if (tg.openInvoice) {
+        // Создаем простой инвойс для Stars
+        const invoiceUrl = `https://t.me/${tg.initDataUnsafe.user?.username || 'Magic_G_bot'}?start=stars${starsAmount}`;
+        tg.openInvoice(invoiceUrl, (status) => {
+            if (status === 'paid') {
+                // Оплата прошла
+                appState.isPaidUser = true;
+                appState.lastPaymentTime = Date.now();
+                saveAppState();
+                updatePaymentButton();
+                
+                if (tg.showAlert) {
+                    tg.showAlert('✅ Оплата прошла успешно! Теперь у вас неограниченный доступ.');
+                }
             }
-        } else if (status === 'failed') {
-            alert('Оплата не удалась. Попробуйте еще раз.');
-        } else if (status === 'cancelled') {
-            console.log('Оплата отменена');
+        });
+    }
+    
+    console.log(`Запрошена оплата ${starsAmount} звёзд`);
+}
         }
     });
 }
