@@ -1,5 +1,4 @@
 // Telegram WebApp API
-
 const tg = window.Telegram.WebApp;
 tg.expand(); // Раскрываем на весь экран
 tg.ready();
@@ -26,52 +25,40 @@ const buttons = {
     new: document.getElementById('btn-new')
 };
 
-// Настройки (ЗАМЕНИТЕ ЭТИ ССЫЛКИ!)
+// НАСТРОЙКИ (ВНИМАТЕЛЬНО ПРОВЕРЬТЕ ЭТИ ССЫЛКИ!)
 const CONFIG = {
-    // Замените на ваши реальные ссылки
-    CARDS_BASE_URL: "https://github.com/Artishoko/gor-cost-prognosis/blob/f3edc4f54480da780cdf863bc975b48e33b72d6d/Cards/", // Папка с картами на GitHub
-    TOTAL_CARDS: 139,
-    INVOICE_URL: "https://t.me/Magic_G_bot?start=invoice_123", // Получите у @BotFather
-    PAYMENT_AMOUNT: 10 // Звёзд
+    // ВАЖНО: Используйте raw-ссылку на папку с картами. Убедитесь, что в папке Cards/ лежат файлы card1.jpg, card2.jpg...
+    CARDS_BASE_URL: "https://raw.githubusercontent.com/Artishoko/gor-cost-prognosis/main/Cards/",
+    TOTAL_CARDS: 108, // Укажите реальное количество ваших картинок
+    INVOICE_URL: "https://t.me/Magic_G_bot?start=invoice_123", // Ссылка на инвойс от @BotFather
+    PAYMENT_AMOUNT: 10 // Сумма в звёздах
 };
 
-// Инициализация
+// Инициализация приложения
 function initApp() {
-    
-    // === КОД ДЛЯ ПРОВЕРКИ "ПЕРВЫХ 100" ЧЕРЕЗ LOCALSTORAGE ===
-    const freeAccessKey = 'hasFreeAccess'; // Ключ для хранения метки у пользователя
-    const freeAccessGivenKey = 'freeAccessCounter'; // Ключ для нашего "счётчика"
-    
-    // 1. Пытаемся получить наш "счётчик" из localStorage
+    // === ЛОГИКА ДЛЯ ПЕРВЫХ 100 БЕСПЛАТНЫХ ПОЛЬЗОВАТЕЛЕЙ ===
+    const freeAccessKey = 'hasFreeAccess';
+    const freeAccessGivenKey = 'freeAccessCounter';
+
+    // Получаем текущий счётчик
     let freeAccessCounter = parseInt(localStorage.getItem(freeAccessGivenKey)) || 0;
-    
-    // 2. Проверяем, получал ли уже ЭТОТ пользователь бесплатный доступ
     const userAlreadyGotFreeAccess = localStorage.getItem(freeAccessKey);
-    
-    // 3. Если пользователь еще не получал доступ И счётчик меньше 100
+
+    // Если пользователь ещё не получал доступ и счётчик меньше 100
     if (!userAlreadyGotFreeAccess && freeAccessCounter < 100) {
-        // Даём ему бесплатный доступ
-        appState.paid = true;
-        // Помечаем, чтобы больше не давать
-        localStorage.setItem(freeAccessKey, 'true');
-        // Увеличиваем наш "счётчик" на 1
-        freeAccessCounter++;
+        appState.paid = true; // Даём доступ
+        localStorage.setItem(freeAccessKey, 'true'); // Помечаем пользователя
+        freeAccessCounter++; // Увеличиваем счётчик
         localStorage.setItem(freeAccessGivenKey, freeAccessCounter.toString());
-        
         console.log(`Бесплатный доступ выдан. Всего получило: ${freeAccessCounter}/100 пользователей.`);
     }
-    // === КОНЕЦ ДОБАВЛЕННОГО КОДА ===
-    
-    // ... остальная существующая логика функции initApp() ...
-    // Проверяем, был ли уже оплачен прогноз
-    const savedState = localStorage.getItem('gor_cost_app_state');
-    // ... и так далее ...
-}
-    // Проверяем, был ли уже оплачен прогноз
+
+    // === ОРИГИНАЛЬНАЯ ЛОГИКА ИНИЦИАЛИЗАЦИИ ===
+    // Проверяем, был ли уже оплачен прогноз ранее (из сохранённого состояния)
     const savedState = localStorage.getItem('gor_cost_app_state');
     if (savedState) {
         try {
-         appState = JSON.parse(savedState);
+            appState = JSON.parse(savedState);
             // Проверяем, не прошло ли больше 24 часа с последней оплаты
             if (appState.lastPaymentTime && 
                 (Date.now() - appState.lastPaymentTime) < 24 * 60 * 60 * 1000) {
@@ -86,58 +73,33 @@ function initApp() {
     
     // Обновляем кнопки в зависимости от состояния оплаты
     updatePaymentButton();
-    
     // Назначаем обработчики событий
     setupEventListeners();
 }
 
 // Назначаем обработчики кнопок
 function setupEventListeners() {
-    // Старт
-    buttons.start.addEventListener('click', () => {
-        showScreen('payment');
-    });
-    
-    // Донат через Telegram Stars
-    buttons.donate.addEventListener('click', () => {
-        processPayment();
-    });
-    
-    // Получить прогноз
+    buttons.start.addEventListener('click', () => showScreen('payment'));
+    buttons.donate.addEventListener('click', processPayment);
     buttons.getPrognosis.addEventListener('click', () => {
         generatePrognosis();
         showScreen('result');
     });
-    
-    // Поделиться
     buttons.share.addEventListener('click', sharePrognosis);
-    
-    // Новый прогноз
     buttons.new.addEventListener('click', () => {
         if (appState.paid && appState.currentCards.length > 0) {
-            // Если уже оплачено, генерируем новый расклад
-            generatePrognosis();
+            generatePrognosis(); // Новый расклад, если оплачено
         } else {
-            // Иначе возвращаем к оплате
-            showScreen('payment');
+            showScreen('payment'); // Иначе возврат к оплате
         }
     });
 }
 
-// Показать определенный экран
+// Показать определённый экран
 function showScreen(screenName) {
-    // Скрываем все экраны
-    Object.values(screens).forEach(screen => {
-        screen.classList.remove('active');
-    });
-    
-    // Показываем нужный экран
+    Object.values(screens).forEach(screen => screen.classList.remove('active'));
     screens[screenName].classList.add('active');
-    
-    // Обновляем состояние кнопок
-    if (screenName === 'payment') {
-        updatePaymentButton();
-    }
+    if (screenName === 'payment') updatePaymentButton();
 }
 
 // Обновить состояние кнопки оплаты
@@ -162,23 +124,19 @@ function processPayment() {
         return;
     }
     
-    // Открываем инвойс для оплаты
     tg.openInvoice(CONFIG.INVOICE_URL, (status) => {
         if (status === 'paid') {
-            // Успешная оплата
             appState.paid = true;
             appState.lastPaymentTime = Date.now();
             saveState();
             updatePaymentButton();
             
-            // Показываем уведомление в Telegram
             if (tg.showAlert) {
                 tg.showAlert('✅ Оплата прошла успешно! Теперь можете получить прогноз.');
             }
         } else if (status === 'failed') {
             alert('Оплата не удалась. Попробуйте еще раз.');
         } else if (status === 'cancelled') {
-            // Пользователь отменил оплату
             console.log('Пользователь отменил оплату');
         }
     });
@@ -191,13 +149,10 @@ function generatePrognosis() {
         return;
     }
     
-    // Генерируем 6 уникальных случайных чисел от 1 до 108
     const cards = [];
     while (cards.length < 6) {
         const randomCard = Math.floor(Math.random() * CONFIG.TOTAL_CARDS) + 1;
-        if (!cards.includes(randomCard)) {
-            cards.push(randomCard);
-        }
+        if (!cards.includes(randomCard)) cards.push(randomCard);
     }
     
     appState.currentCards = cards;
@@ -212,36 +167,27 @@ function displayCards(cardNumbers) {
     positions.forEach((position, index) => {
         const cardElement = document.getElementById(`card-${position}`);
         const cardNumber = cardNumbers[index];
-        
-        // Формируем URL карты (предполагаем, что карты названы card1.jpg, card2.jpg и т.д.)
+        // Формируем правильный URL карты
         const cardUrl = `${CONFIG.CARDS_BASE_URL}card${cardNumber}.jpg`;
         
-        // Устанавливаем изображение
         const img = cardElement.querySelector('img');
         img.src = cardUrl;
         img.alt = `Карта ${cardNumber}`;
         
-        // Добавляем анимацию
         cardElement.classList.remove('revealed');
-        setTimeout(() => {
-            cardElement.classList.add('revealed');
-        }, index * 100); // Задержка для эффекта последовательного открытия
+        setTimeout(() => cardElement.classList.add('revealed'), index * 100);
     });
 }
 
 // Поделиться прогнозом
 function sharePrognosis() {
     if (tg.shareUrl) {
-        // В реальном приложении здесь можно сгенерировать изображение с раскладом
-        // Для простоты делимся ссылкой на бота
         const shareText = `🔮 Мой прогноз на день от "Прогноз от Горностая"!\n\nПрисоединяйся: https://t.me/${tg.initDataUnsafe.user?.username || 'your_bot'}`;
-        
         tg.shareUrl(
             `https://t.me/share/url?url=${encodeURIComponent('https://t.me/your_bot')}&text=${encodeURIComponent(shareText)}`,
             'Посмотри мой прогноз на день!'
         );
     } else {
-        // Для браузера или если функция недоступна
         const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent('Я получил прогноз на день!')}`;
         window.open(shareUrl, '_blank');
     }
@@ -252,38 +198,18 @@ function saveState() {
     localStorage.setItem('gor_cost_app_state', JSON.stringify(appState));
 }
 
-// Запуск приложения при загрузке
+// Запуск приложения при загрузке страницы
 document.addEventListener('DOMContentLoaded', initApp);
 
-// Функция для отладки (можно удалить в продакшене)
-function debugGenerateFree() {
-    appState.paid = true;
-    updatePaymentButton();
-    buttons.getPrognosis.disabled = false;
-    console.log('Режим отладки: оплата активирована');
-}
-
-// Для тестирования можно раскомментировать:
-// debugGenerateFree();
-
-// Функция для проверки загрузки карт
+// Функция для проверки загрузки карт (для отладки)
 function testCardsLoad() {
     console.log("🔄 Тестируем загрузку карт...");
-    
-    // Проверяем первые 5 карт
-    for(let i = 1; i <= 5; i++) {
+    for(let i = 1; i <= 3; i++) { // Проверяем только первые 3 карты
         const img = new Image();
         img.src = `${CONFIG.CARDS_BASE_URL}card${i}.jpg`;
-        
-        img.onload = function() {
-            console.log(`✅ Карта ${i} загружена успешно: ${img.src}`);
-        };
-        
-        img.onerror = function() {
-            console.error(`❌ Ошибка загрузки карты ${i}: ${img.src}`);
-        };
+        img.onload = () => console.log(`✅ Карта ${i} загружена: ${img.src}`);
+        img.onerror = () => console.error(`❌ Ошибка загрузки карты ${i}: ${img.src}`);
     }
 }
-
-// Вызвать после загрузки страницы
+// Проверка через секунду после загрузки
 setTimeout(testCardsLoad, 1000);
