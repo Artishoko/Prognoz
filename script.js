@@ -29,7 +29,7 @@ const buttons = {
 const CONFIG = {
     // Замените на ваши реальные ссылки
     CARDS_BASE_URL: "https://github.com/Artishoko/gor-cost-prognosis/blob/f3edc4f54480da780cdf863bc975b48e33b72d6d/Cards/", // Папка с картами на GitHub
-    TOTAL_CARDS: 108,
+    TOTAL_CARDS: 139,
     INVOICE_URL: "https://t.me/Magic_G_bot?start=invoice_123", // Получите у @BotFather
     PAYMENT_AMOUNT: 10 // Звёзд
 };
