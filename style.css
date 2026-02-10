@@ -248,6 +248,108 @@ h1 {
     
     .card-show {
         height: 210px !important;
+        /* ДВА РЯДА ГОРИЗОНТАЛЬНЫХ КАРТ (АЛЬБОМНЫЕ) */
+.field-container {
+    display: block !important;
+    width: 100% !important;
+    max-width: 900px !important;
+    margin: 30px auto !important;
+    padding: 25px !important;
+    background: rgba(26, 26, 26, 0.9) !important;
+    border: 2px solid #d4af37 !important;
+    border-radius: 20px !important;
+}
+
+/* Стиль для каждого ряда - горизонтальное расположение карт */
+.row {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 30px !important;
+    width: 100% !important;
+}
+
+.row:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Ячейка карты - теперь каждая занимает 1/3 ряда */
+.card-slot {
+    flex: 0 0 30% !important; /* Три карты в ряд */
+    max-width: 30% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+/* Надпись над картой */
+.slot-label {
+    font-size: 14px !important;
+    font-weight: bold !important;
+    color: #f5e9d4 !important;
+    margin-bottom: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* Контейнер для картинки - ГОРИЗОНТАЛЬНЫЙ (ширина больше высоты) */
+.card-show {
+    width: 100% !important;
+    height: 160px !important; /* Фиксированная высота */
+    border: 3px solid #d4af37 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    background: #2d2d2d !important;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5) !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+}
+
+/* Картинка внутри - растягивается по всей площади */
+.card-show img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* Заполняет контейнер, обрезая если нужно */
+    object-position: center !important;
+    display: block !important;
+}
+
+/* Эффекты */
+.card-show:hover {
+    transform: scale(1.03) !important;
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4) !important;
+    border-color: #ffd700 !important;
+}
+
+/* Анимация появления */
+@keyframes cardReveal {
+    0% { opacity: 0; transform: translateY(15px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.card-show.revealed {
+    animation: cardReveal 0.4s ease-out !important;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .card-show {
+        height: 140px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .card-show {
+        height: 120px !important;
+    }
+    
+    .slot-label {
+        font-size: 12px !important;
+    }
+}
     }
     
     .field-container {
