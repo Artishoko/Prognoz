@@ -29,7 +29,7 @@ const buttons = {
 const CONFIG = {
     // ВАЖНО: Используйте raw-ссылку на папку с картами. Убедитесь, что в папке Cards/ лежат файлы card1.jpg, card2.jpg...
     CARDS_BASE_URL: "https://raw.githubusercontent.com/Artishoko/gor-cost-prognosis/main/Cards/",
-    TOTAL_CARDS: 108, // Укажите реальное количество ваших картинок
+    TOTAL_CARDS: 139, // Укажите реальное количество ваших картинок
     INVOICE_URL: "https://t.me/Magic_G_bot?start=invoice_123", // Ссылка на инвойс от @BotFather
     PAYMENT_AMOUNT: 10 // Сумма в звёздах
 };
