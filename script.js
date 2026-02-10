@@ -39,7 +39,7 @@ const paymentNote = document.getElementById('payment-note');
 const CONFIG = {
     // ВАЖНО: путь должен соответствовать именам ваших файлов!
     CARDS_BASE_URL: "https://raw.githubusercontent.com/Artishoko/gor-cost-prognosis/main/Cards/",
-    TOTAL_CARDS: 108, // Укажите реальное количество карт
+    TOTAL_CARDS: 139, // Укажите реальное количество карт
     PAYMENT_AMOUNT: 10
 };
 
